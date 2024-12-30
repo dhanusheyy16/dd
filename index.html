@@ -1,17 +1,256 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>sampleApp</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saree Elegance - A Grand Experience</title>
+    <style>
+        /* New Color Scheme */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            padding-bottom: 60px; /* To avoid content being hidden behind the fixed footer */
+        }
+
+        header {
+            background-color: #005f73;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+        }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .product h3 {
+            font-size: 22px;
+            margin: 15px 0;
+            color: #005f73;
+        }
+
+        .product p {
+            color: #555;
+            font-size: 16px;
+        }
+
+        .product button {
+            background-color: #008cba;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .product button:hover {
+            background-color: #006f8e;
+        }
+
+        .form-container {
+            padding: 20px;
+            background-color: #eaf6f6;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            color: #005f73;
+            margin-bottom: 15px;
+        }
+
+        .form-container input, .form-container textarea, .form-container button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .form-container button {
+            background-color: #008cba;
+            color: white;
+            border: none;
+        }
+
+        .form-container button:hover {
+            background-color: #006f8e;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #005f73;
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
 </head>
-
 <body>
-    <h1>Hello World</h1>
-</body>
+    <header>
+        <div class="container">
+            <h1>Saree Elegance</h1>
+        </div>
+    </header>
 
+    <!-- Customer Form (First Step) -->
+    <section class="form-container" id="customer-form-container">
+        <h2>Enter Your Details</h2>
+        <form id="customer-form">
+            <label for="customer-name">Your Name:</label>
+            <input type="text" id="customer-name" required>
+
+            <label for="customer-location">Your Location:</label>
+            <input type="text" id="customer-location" required>
+
+            <button type="submit">Next</button>
+        </form>
+    </section>
+
+    <!-- Product Section (Second Step) -->
+    <section id="products" style="display:none;">
+        <div class="container">
+            <h2>Our Products</h2>
+            <div id="product-list" class="product-grid">
+                <!-- Dynamically generated products will appear here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Upload Form (For Admin) -->
+    <section class="form-container">
+        <h2>Upload Product Details</h2>
+        <form id="product-form">
+            <label for="product-name">Product Name:</label>
+            <input type="text" id="product-name" required>
+
+            <label for="product-price">Price:</label>
+            <input type="number" id="product-price" required>
+
+            <label for="product-description">Description:</label>
+            <textarea id="product-description" required></textarea>
+
+            <label for="product-image">Product Image:</label>
+            <input type="file" id="product-image" accept="image/*" required>
+
+            <button type="submit">Upload Product</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Saree Elegance. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById("customer-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const customerName = document.getElementById("customer-name").value;
+            const customerLocation = document.getElementById("customer-location").value;
+
+            window.customerDetails = { name: customerName, location: customerLocation };
+
+            document.getElementById("customer-form-container").style.display = "none";
+            document.getElementById("products").style.display = "block";
+        });
+
+        document.getElementById("product-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const productName = document.getElementById("product-name").value;
+            const productPrice = document.getElementById("product-price").value;
+            const productDescription = document.getElementById("product-description").value;
+            const productImage = document.getElementById("product-image").files[0];
+
+            if (productImage) {
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    const productData = {
+                        name: productName,
+                        price: productPrice,
+                        description: productDescription,
+                        image: event.target.result,
+                    };
+
+                    displayProduct(productData);
+                };
+
+                reader.readAsDataURL(productImage);
+            } else {
+                alert("Please upload a valid image.");
+            }
+        });
+
+        function displayProduct(product) {
+            const productList = document.getElementById("product-list");
+
+            const productDiv = document.createElement("div");
+            productDiv.classList.add("product");
+
+            productDiv.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <p>Price: $${product.price}</p>
+                <p>${product.description}</p>
+                <button onclick="placeOrder('${product.name}', ${product.price})">Order Now</button>
+            `;
+
+            productList.appendChild(productDiv);
+
+            document.getElementById("product-form").reset();
+        }
+
+        function placeOrder(productName, price) {
+            const customerName = window.customerDetails.name;
+            const customerLocation = window.customerDetails.location;
+
+            const orderMessage = `
+                Customer Name: ${customerName}
+                Ordered Product: ${productName}
+                Location: ${customerLocation}
+                Price: $${price}
+            `;
+
+            const phoneNumber = '919361550283';
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(orderMessage)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
 </html>
